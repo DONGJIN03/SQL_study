@@ -1,0 +1,38 @@
+## [자동차 종류 별 특정 옵션이 포함된 자동차 수 구하기]
+
+>핵심 개념: GROUP BY, FLOOR
+
+### 문제 요약
+'통풍시트','열선시트','가죽시트'중 하나 이상의 옵션이 포함된 자동차가 자동차 종류별로 몇대인지 출력
+
+### 데이터 구조
+| 컬럼명 | 설명 |
+|------|------|
+| car_id | 자동차 ID |
+| car_type | 자동차 종류 |
+| daily_fee | 일일 대여 요금 |
+| options | 옵션 리스트 |
+---
+### 접근 방식
+1. WHERE 조건식에서 LIKE 패턴 추출문을 통해 각각 '통풍시트','열선시트','가죽시트' 단어 포함 된 조건 필터링
+   <br> 각 조건들은 하나만 성립되어도 되므로 or 로 연결
+2. 자동차 종류별로 집계하기 위해 car_type으로 그룹을 묶어줌
+3. 자동차 종류와 그룹별 자동차 수를 COUNT 집계해서 출력해줌
+4. 자동차 종류 기준으로 정렬
+---
+
+### 시행착오
+- IN을 사용하여 해당 옵션 여부를 파악할려 함. 하지만 이 경우 부분 문자열 포함여부를 알 수 없음.
+
+---
+
+### 최종 쿼리
+```sql
+SELECT  CAR_TYPE,
+        COUNT(CAR_ID) AS CARS
+FROM CAR_RENTAL_COMPANY_CAR
+WHERE OPTIONS LIKE '%통풍시트%' OR
+      OPTIONS LIKE '%열선시트%' OR
+      OPTIONS LIKE '%가죽시트%'
+GROUP BY CAR_TYPE
+ORDER BY CAR_TYPE ASC;
