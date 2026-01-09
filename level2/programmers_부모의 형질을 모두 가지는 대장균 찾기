@@ -1,0 +1,43 @@
+## [부모의 형질을 모두 가지는 대장균 형질 찾기]
+
+>핵심 개념: 서브쿼리, JOIN, & 연산자
+
+### 문제 요약
+  부모의 형질을 모두 보유한 대장균의 id, 대장균의 형질, 부모 대장균의 형질을 출력
+
+### 데이터 구조
+| 컬럼명 | 설명 |
+|------|------|
+| id | 대장균 개체의 id |
+| parent_id | 부모 개체의 id |
+| size_of_colnony | 개체의 크기 |
+| differentiation_date | 분화되어 나온 날짜 |
+| genotype | 개체의 형질 |
+---
+### 접근 방식
+1. 부모 형질을 보유한지 확인하기 위해 부모 개체의 id와 형질을 가진 테이블이 필요함
+  <br> 서브쿼리를 이용해 부모 개체의 id와 형질을 나타내는 테이블 생성
+2. 기존 테이블의 부모 개체 id와 서브쿼리를 이용해 생성한 테이블의 id가 같은 기준으로 조인 
+  <br> 새로 생성한 테이블은 부모 개체 정보를 나타내는 테이블이므로 기존 부모 개체 id와 동일
+3. 기존 테이블의 형질과 새로 생성된 테이블의 형질(부모 개체의 형질)을 &연산을 통해 비교
+   <br> 모두 보유시 & 연산 결과는 부모 형질과 같은 값을 가지므로 해당 조건을 WHERE절에 사용
+4. 대장균의 id, 대장균의 형질, 부모 대장균의 형질 출력
+5. 대장균 id 기준 정렬
+---
+
+### 시행착오
+- 형질 비교시 모두 보유한 경우를 고려하지 못하고 0이 아닌 조건을 필터링 하여 보유만 한 경우도 출력함
+  <br> 모두 보유한 경우는 부모 형질과 동일한 결과값 나옴
+
+---
+
+### 최종 쿼리
+```sql
+SELECT  E1.ID,
+        E1.GENOTYPE, 
+        E2.PARENT_GENOTYPE
+FROM ECOLI_DATA E1 INNER JOIN 
+    (SELECT ID, GENOTYPE AS PARENT_GENOTYPE FROM ECOLI_DATA) E2
+ON E1.PARENT_ID = E2.ID
+WHERE E1.GENOTYPE & E2.PARENT_GENOTYPE = E2.PARENT_GENOTYPE
+ORDER BY E1.ID;
