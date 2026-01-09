@@ -16,10 +16,10 @@
 ---
 
 ### 접근 방식
-- 조건 필터링 WHERE에서 조건(해당 날짜) 필터링
-- CASE문을 이용해 조건에 따른 값 분류해 칼럼 추가
-- 대여기간 계산 (end_date - start_date + 1) *DATEDIFF 문 사용 가능
-- DATE_FORMAT을 이용해 날짜 형식 동일
+1. 조건 필터링 WHERE에서 조건(해당 날짜) 필터링
+2. CASE문을 이용해 조건에 따른 값 분류해 칼럼 추가
+3. 대여기간 계산 (end_date - start_date + 1) / DATEDIFF 문 사용 가능
+4. DATE_FORMAT을 이용해 날짜 형식 동일
 
 
 ### 시행착오
